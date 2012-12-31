@@ -13,6 +13,8 @@ To install : ::
 Usage
 =====
 
+Trunk tries to be as simple as possible ::
+
 .. code-block:: python
     t = Trunk("postgres://localhost/noclue")
     for notification in t.listen("clues"):
