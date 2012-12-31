@@ -18,7 +18,7 @@ class Trunk(object):
 
     def listen(self, key):
         cursor = self.conn.cursor()
-        cursor.execute("LISTEN %s" % key)
+        cursor.execute("LISTEN \"%s\"" % key)
         cursor.close()
         while True:
             if select.select([self.conn], [], [], 5) == ([], [], []):
@@ -35,5 +35,5 @@ class Trunk(object):
 
     def unlisten(self, key):
         cursor = self.conn.cursor()
-        cursor.execute("UNLISTEN %s;" % key)
+        cursor.execute("UNLISTEN \"%s\";" % key)
         cursor.close()
