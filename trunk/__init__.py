@@ -16,17 +16,17 @@ class Trunk(object):
                                      port=params.port)
         self.conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
-    def listen(self, key):
+    def listen(self, key, timeout=None):
         cursor = self.conn.cursor()
         cursor.execute("LISTEN \"%s\"" % key)
         cursor.close()
-        while True:
-            if select.select([self.conn], [], [], 5) == ([], [], []):
-                pass
-            else:
-                self.conn.poll()
-                while self.conn.notifies:
-                    yield self.conn.notifies.pop()
+        while not self.conn.notifies:
+            r, w, e = select.select([self.conn], [], [], timeout)
+            if not (r or w or e):
+                raise StopIteration
+            self.conn.poll()
+            while self.conn.notifies:
+                yield self.conn.notifies.pop()
 
     def notify(self, key, payload):
         cursor = self.conn.cursor()
