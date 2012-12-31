@@ -28,7 +28,7 @@ class Trunk(object):
             while self.conn.notifies:
                 yield self.conn.notifies.pop()
 
-    def notify(self, key, payload):
+    def notify(self, key, payload=None):
         cursor = self.conn.cursor()
         cursor.execute("SELECT pg_notify(%s, %s);", (key, payload))
         cursor.close()
