@@ -3,9 +3,11 @@ import select
 import psycopg2
 import psycopg2.extensions
 
-from urlparse import urlparse, uses_netloc
-
-uses_netloc.append('postgres')
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse, uses_netloc  # noqa
+    uses_netloc.append('postgres')
 
 
 class Trunk(object):
@@ -26,7 +28,8 @@ class Trunk(object):
                 raise StopIteration
             self.conn.poll()
             while self.conn.notifies:
-                yield self.conn.notifies.pop()
+                notify = self.conn.notifies.pop()
+                yield notify.payload
 
     def notify(self, key, payload=None):
         cursor = self.conn.cursor()
