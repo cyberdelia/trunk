@@ -3,11 +3,12 @@ import select
 import psycopg2
 import psycopg2.extensions
 
+from Queue import Empty
+
 try:
     from urllib.parse import urlparse
 except ImportError:
-    from urlparse import urlparse, uses_netloc  # noqa
-    uses_netloc.append('postgres')
+    from urlparse import urlparse  # noqa
 
 
 class Trunk(object):
@@ -29,7 +30,18 @@ class Trunk(object):
             self.conn.poll()
             while self.conn.notifies:
                 notify = self.conn.notifies.pop()
-                yield notify.payload
+                yield notify.channel, notify.payload
+
+    def pop(self, key):
+        cursor = self.conn.cursor()
+        cursor.execute("LISTEN \"%s\"" % key)
+        cursor.close()
+        self.conn.poll()
+        if self.conn.notifies:
+            notify = self.conn.notifies.pop()
+            return notify.channel, notify.payload
+        else:
+            raise Empty()
 
     def notify(self, key, payload=None):
         cursor = self.conn.cursor()
