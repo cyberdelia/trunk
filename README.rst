@@ -22,8 +22,8 @@ Trunk tries to be as simple as possible ::
     t.unlisten("clues")
 
 
-Use with Celery
-===============
+Celery
+======
 
 Trunk provides a `Kombu <http://kombu.readthedocs.org>`_, that allows you to
 use trunk with `Celery <http://celeryproject.org>`_, to do configure Celery with ::
