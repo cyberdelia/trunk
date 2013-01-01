@@ -25,7 +25,8 @@ Trunk tries to be as simple as possible ::
 Celery
 ======
 
-Trunk provides a `Kombu <http://kombu.readthedocs.org>`_, that allows you to
-use trunk with `Celery <http://celeryproject.org>`_, to do configure Celery with ::
+Trunk provides a `Kombu <http://kombu.readthedocs.org>`_ transport,
+that allows you to use trunk with `Celery <http://celeryproject.org>`_,
+to do configure Celery with ::
 
     BROKER_URL = 'trunk.transport.Transport://localhost/database'
