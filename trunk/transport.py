@@ -31,7 +31,6 @@ class Transport(virtual.Transport):
     Channel = Channel
 
     default_port = 5432
-    virtual_host = '/postgres'
 
     driver_type = 'postgres'
     driver_name = 'postgres'
