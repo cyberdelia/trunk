@@ -16,8 +16,8 @@ Usage
 Trunk tries to be as simple as possible ::
 
     t = Trunk("postgres://localhost/noclue")
-    for notification in t.listen("clues"):
-        print notification.channel, notification.payload
+    for channel, payload in t.listen("clues"):
+        print channel, payload
     t.notify("clues", "chandelier")
     t.unlisten("clues")
 
