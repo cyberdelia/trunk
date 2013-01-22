@@ -7,7 +7,7 @@ with open('README.rst') as f:
 
 setup(
     name='trunk',
-    version='0.1.0',
+    version='0.2.0',
     description='Making postgres listen/notify easier.',
     long_description=readme,
     author='Timothée Peignier',
