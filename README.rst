@@ -30,3 +30,10 @@ that allows you to use trunk with `Celery <http://celeryproject.org>`_,
 to do configure Celery with ::
 
     BROKER_URL = 'trunk.transport.Transport://localhost/database'
+
+Limitations
+-----------
+
+For now, and since LISTEN/NOTIFY behavior is not strictly speaking a queue,
+if you have more than one celery worker (but you can use worker concurrency),
+each worker will receive every job send.
