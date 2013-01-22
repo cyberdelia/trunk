@@ -17,7 +17,7 @@ class Channel(virtual.Channel):
         self.trunk = Trunk(dsn)
 
     def _get(self, queue, timeout=None):
-        _, message = self.trunk.pop(queue)
+        _, message = self.trunk.get(queue)
         return loads(message)
 
     def _put(self, queue, message, **kwargs):

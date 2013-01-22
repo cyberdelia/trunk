@@ -32,7 +32,7 @@ class Trunk(object):
                 notify = self.conn.notifies.pop()
                 yield notify.channel, notify.payload
 
-    def pop(self, key):
+    def get(self, key):
         cursor = self.conn.cursor()
         cursor.execute("LISTEN \"%s\"" % key)
         cursor.close()
