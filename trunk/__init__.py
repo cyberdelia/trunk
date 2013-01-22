@@ -57,6 +57,7 @@ class Trunk(object):
         self.put(key, payload)
 
     def notifications(self, key):
+        self.listen(key)
         while True:
             yield self.get(key)
 
