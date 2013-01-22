@@ -16,15 +16,22 @@ class Channel(virtual.Channel):
                         username=parts.userid, password=parts.password)
         self.trunk = Trunk(dsn)
 
+    def _new_queue(self, queue, **kwargs):
+        self.trunk.listen(queue)
+
     def _get(self, queue, timeout=None):
-        _, message = self.trunk.get(queue)
+        _, message = self.trunk.get_nowait(queue)
         return loads(message)
 
     def _put(self, queue, message, **kwargs):
-        self.trunk.notify(queue, dumps(message))
+        self.trunk.put(queue, dumps(message))
 
     def _purge(self, queue):
         self.trunk.unlisten(queue)
+
+    def close(self):
+        super(Channel, self).close()
+        self.trunk.close()
 
 
 class Transport(virtual.Transport):
