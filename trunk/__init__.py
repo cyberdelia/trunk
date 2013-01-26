@@ -3,6 +3,8 @@ import select
 import psycopg2
 import psycopg2.extensions
 
+from contextlib import contextmanager
+
 try:
     from Queue import Empty, Full
 except ImportError:
@@ -23,10 +25,15 @@ class Trunk(object):
                                      port=params.port)
         self.conn.autocommit = True
 
-    def listen(self, key):
+    @contextmanager
+    def cursor(self):
         cursor = self.conn.cursor()
-        cursor.execute("LISTEN \"%s\"" % key)
+        yield cursor
         cursor.close()
+
+    def listen(self, key):
+        with self.cursor() as cursor:
+            cursor.execute("LISTEN \"%s\"" % key)
 
     def get(self, key, block=True, timeout=None):
         if not block:
@@ -62,16 +69,14 @@ class Trunk(object):
             yield self.get(key)
 
     def unlisten(self, key):
-        cursor = self.conn.cursor()
-        cursor.execute("UNLISTEN \"%s\";" % key)
-        cursor.close()
+        with self.cursor() as cursor:
+            cursor.execute("UNLISTEN \"%s\";" % key)
 
     def channels(self):
-        cursor = self.conn.cursor()
-        cursor.execute("SELECT pg_listening_channels();")
-        channels = cursor.fetchall()
-        cursor.close()
-        return [c[0] for c in channels]
+        with self.cursor() as cursor:
+            cursor.execute("SELECT pg_listening_channels();")
+            channels = cursor.fetchall()
+            return [c[0] for c in channels]
 
     def close(self):
         self.conn.close()
