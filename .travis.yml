@@ -6,4 +6,4 @@ python:
 install: pip install -q --use-mirrors tox
 before_script:
   - psql -c 'create database trunk;' -U postgres
-script: tox -e py26,py27,py33
+script: tox
