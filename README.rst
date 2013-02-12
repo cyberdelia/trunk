@@ -34,10 +34,6 @@ to do so, configure Celery with : ::
 Setup
 -----
 
-You will need to create a new table and add two functions to your database
-
-    .. raw:: html
-       :file: sql/table.sql
-
-    .. raw:: html
-       :file: sql/ddl.sql
+You will need to create a new table and add two functions to your database.
+See `table.sql <https://github.com/cyberdelia/trunk/blob/master/sql/table.sql>`_
+and `ddl.sql <https://github.com/cyberdelia/trunk/blob/master/sql/ddl.sql`_.
