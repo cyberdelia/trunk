@@ -31,9 +31,13 @@ to do so, configure Celery with : ::
 
     BROKER_URL = 'trunk.transport.Transport://localhost/database'
 
-Limitations
------------
+Setup
+-----
 
-For now, and since LISTEN/NOTIFY behavior is not strictly speaking a queue,
-if you have more than one celery worker (but you can use worker concurrency),
-each worker will receive every job send.
+You will need to create a new table and add two functions to your database
+
+.. literalinclude:: sql/table.sql
+   :language: sql
+
+.. literalinclude:: sql/ddl.sql
+   :language: sql
