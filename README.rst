@@ -36,8 +36,8 @@ Setup
 
 You will need to create a new table and add two functions to your database
 
-.. literalinclude:: sql/table.sql
-   :language: sql
+    .. raw:: html
+       :file: sql/table.sql
 
-.. literalinclude:: sql/ddl.sql
-   :language: sql
+    .. raw:: html
+       :file: sql/ddl.sql
