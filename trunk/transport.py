@@ -3,7 +3,7 @@ from anyjson import loads, dumps
 
 from kombu.transport import virtual
 
-from trunk import Trunk
+from trunk.queue import PGQueue
 from trunk.utils import build_dsn
 
 
@@ -14,24 +14,24 @@ class Channel(virtual.Channel):
         dsn = build_dsn(scheme='postgres', hostname=parts.hostname,
                         port=parts.port, path=parts.virtual_host,
                         username=parts.userid, password=parts.password)
-        self.trunk = Trunk(dsn)
+        self.queue = PGQueue(dsn)
 
     def _new_queue(self, queue, **kwargs):
-        self.trunk.listen(queue)
+        self.queue.create(queue)
 
     def _get(self, queue, timeout=None):
-        _, message = self.trunk.get_nowait(queue)
+        _, message = self.queue.get_nowait(queue)
         return loads(message)
 
     def _put(self, queue, message, **kwargs):
-        self.trunk.put(queue, dumps(message))
+        self.queue.put(queue, dumps(message))
 
     def _purge(self, queue):
-        self.trunk.unlisten(queue)
+        self.queue.purge(queue)
 
     def close(self):
         super(Channel, self).close()
-        self.trunk.close()
+        self.queue.close()
 
 
 class Transport(virtual.Transport):

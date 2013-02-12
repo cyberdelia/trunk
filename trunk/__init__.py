@@ -6,9 +6,9 @@ import psycopg2.extensions
 from contextlib import contextmanager
 
 try:
-    from Queue import Empty, Full
+    from Queue import Empty
 except ImportError:
-    from queue import Empty, Full  # noqa
+    from queue import Empty  # noqa
 
 
 try:
@@ -48,20 +48,9 @@ class Trunk(object):
                     raise Empty()
                 self.conn.poll()
 
-    def get_nowait(self, key):
-        return self.get(key, block=False)
-
-    def put(self, key, payload=None):
-        try:
-            cursor = self.conn.cursor()
-            cursor.execute("SELECT pg_notify(%s, %s);", (key, payload))
-        except psycopg2.Error:
-            raise Full()
-        finally:
-            cursor.close()
-
     def notify(self, key, payload=None):
-        self.put(key, payload)
+        with self.cursor() as cursor:
+            cursor.execute("SELECT pg_notify(%s, %s);", (key, payload))
 
     def notifications(self, key):
         self.listen(key)
