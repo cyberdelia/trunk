@@ -36,4 +36,4 @@ Setup
 
 You will need to create a new table and add two functions to your database.
 See `table.sql <https://github.com/cyberdelia/trunk/blob/master/sql/table.sql>`_
-and `ddl.sql <https://github.com/cyberdelia/trunk/blob/master/sql/ddl.sql`_.
+and `ddl.sql <https://github.com/cyberdelia/trunk/blob/master/sql/ddl.sql>`_.
