@@ -14,7 +14,7 @@ class TrunkTest(TestCase):
 
     def test_get(self):
         self.listener.listen("trunk_get")
-        self.notifier.put("trunk_get", "payload")
+        self.notifier. notify("trunk_get", "payload")
         channel, payload = self.listener.get("trunk_get")
         self.assertEqual(channel, "trunk_get")
         self.assertEqual(payload, "payload")
