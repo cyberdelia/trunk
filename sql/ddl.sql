@@ -30,8 +30,6 @@ BEGIN
     relative_top = 0;
   END IF;
 
-  RAISE NOTICE 'OFFSET %', relative_top;
-
   LOOP
     BEGIN
       EXECUTE 'SELECT id FROM trunk_queue '
