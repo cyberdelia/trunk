@@ -35,7 +35,7 @@ class Trunk(object):
         with self.cursor() as cursor:
             cursor.execute("LISTEN \"%s\"" % key)
 
-    def get(self, key, block=True, timeout=None):
+    def get(self, block=True, timeout=None):
         if not block:
             timeout = 0
         while True:
@@ -55,7 +55,7 @@ class Trunk(object):
     def notifications(self, key):
         self.listen(key)
         while True:
-            yield self.get(key)
+            yield self.get()
 
     def unlisten(self, key):
         with self.cursor() as cursor:
