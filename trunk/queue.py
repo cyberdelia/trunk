@@ -44,7 +44,6 @@ class PGQueue(object):
         size = self.qsize(name)
         with self.trunk.cursor() as cursor:
             cursor.execute("DELETE FROM trunk_queue WHERE name = %s", (name,))
-        self.trunk.unlisten(name)
         return size
 
     def close(self):
