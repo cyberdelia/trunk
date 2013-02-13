@@ -31,16 +31,18 @@ class Trunk(object):
         yield cursor
         cursor.close()
 
-    def listen(self, key):
+    def listen(self, channel):
         with self.cursor() as cursor:
-            cursor.execute("LISTEN \"%s\"" % key)
+            cursor.execute("LISTEN \"%s\"" % channel)
 
-    def get(self, block=True, timeout=None):
+    def get(self, channel=None, block=True, timeout=None):
         if not block:
             timeout = 0
         while True:
-            if self.conn.notifies:
-                notify = self.conn.notifies.pop()
+            for notify in self.conn.notifies:
+                if channel and notify.channel != channel:
+                    continue
+                self.conn.notifies.remove(notify)
                 return notify.channel, notify.payload
             else:
                 r, w, e = select.select([self.conn], [], [], timeout)
@@ -48,18 +50,17 @@ class Trunk(object):
                     raise Empty()
                 self.conn.poll()
 
-    def notify(self, key, payload=None):
+    def notify(self, channel, payload=None):
         with self.cursor() as cursor:
-            cursor.execute("SELECT pg_notify(%s, %s);", (key, payload))
+            cursor.execute("SELECT pg_notify(%s, %s);", (channel, payload))
 
-    def notifications(self, key):
-        self.listen(key)
+    def notifications(self, channel=None):
         while True:
-            yield self.get()
+            yield self.get(channel)
 
-    def unlisten(self, key):
+    def unlisten(self, channel):
         with self.cursor() as cursor:
-            cursor.execute("UNLISTEN \"%s\";" % key)
+            cursor.execute("UNLISTEN \"%s\";" % channel)
 
     def channels(self):
         with self.cursor() as cursor:
