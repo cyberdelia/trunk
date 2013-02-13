@@ -27,7 +27,7 @@ class Channel(virtual.Channel):
         self.queue.put(queue, dumps(message))
 
     def _purge(self, queue):
-        self.queue.purge(queue)
+        return self.queue.purge(queue)
 
     def close(self):
         super(Channel, self).close()

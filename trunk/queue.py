@@ -41,9 +41,11 @@ class PGQueue(object):
             return row[0]
 
     def purge(self, name):
+        size = self.qsize(name)
         with self.trunk.cursor() as cursor:
             cursor.execute("DELETE FROM trunk_queue WHERE name = %s", (name,))
         self.trunk.unlisten(name)
+        return size
 
     def close(self):
         self.trunk.close()
