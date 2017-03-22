@@ -2,7 +2,6 @@ language: python
 env:
   - DATABASE_URL=postgres://postgres@localhost/trunk
 python:
-  - 2.7
   - 3.6
 install: pip install -q tox
 before_script:
