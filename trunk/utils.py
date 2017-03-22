@@ -1,6 +1,6 @@
 # -*- coding: utf-8  -*-
 try:
-    from urlibe.parse import urlunparse
+    from urllib.parse import urlunparse
 except ImportError:
     from urlparse import urlunparse  # noqa
 
