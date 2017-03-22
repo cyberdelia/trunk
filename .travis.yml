@@ -3,7 +3,8 @@ env:
   - DATABASE_URL=postgres://postgres@localhost/trunk
 python:
   - 2.7
-install: pip install -q --use-mirrors tox
+  - 3.6
+install: pip install -q tox
 before_script:
   - psql -c 'create database trunk;' -U postgres
 script: tox
